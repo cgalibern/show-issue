@@ -17,11 +17,21 @@ consumes:
 # format of the responses to the client (Accepts)
 produces:
   - application/json
+securityDefinitions:
+  AlwaysDenyBasicAuth:
+    type: basic
+    description: fake always denied HTTP Basic Authentication.
+  AlwaysAllowBasicAuth:
+    type: basic
+    description: fake always allowed HTTP Basic Authentication.
 paths:
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
     get:
+      security:
+        - AlwaysDenyBasicAuth: []
+        - AlwaysAllowBasicAuth: []
       description: Returns 'Hello' to the caller
       # used as the method name of the controller
       operationId: hello
