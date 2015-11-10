@@ -2,8 +2,8 @@
 // start swagger project using DEBUG=swagger:swagger_security swagger project start
 // or sails lift --verbose
 var auth = require('basic-auth');
-
-module.exports.securityHandlers = {
+sails.log("loading security hnadlers....");
+module.exports = {
     basicAuthAtDomainUk:function (req, authOrSecDef, scopesOrApiKey, cb) {
         var user = auth (req);
         if (user) {

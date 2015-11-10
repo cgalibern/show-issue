@@ -11,6 +11,10 @@ swagger:
   # (see https://github.com/apigee-127/bagpipes)
   bagpipes:
 
+    _swagger_security:
+      name: swagger_security
+      securityHandlersModule: api/swagger/securityHandlers
+
     _router:
       name: swagger_router
       mockMode: false
@@ -26,7 +30,7 @@ swagger:
       - onError: json_error_handler
       - cors
       - swagger_params_parser
-      - swagger_security
+      - _swagger_security
       - _swagger_validate
       - express_compatibility
       - _router
