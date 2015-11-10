@@ -18,20 +18,20 @@ consumes:
 produces:
   - application/json
 securityDefinitions:
-  AlwaysDenyBasicAuth:
+  basicAuthAtDomainUk:
     type: basic
-    description: fake always denied HTTP Basic Authentication.
-  AlwaysAllowBasicAuth:
+    description: basic auth checks on Uk passwords.
+  basicAuthAtDomainFr:
     type: basic
-    description: fake always allowed HTTP Basic Authentication.
+    description: basic auth checks on Fr passwords.
 paths:
   /hello:
     # binds a127 app logic to a route
     x-swagger-router-controller: hello_world
     get:
       security:
-        - AlwaysDenyBasicAuth: []
-        - AlwaysAllowBasicAuth: []
+        - basicAuthAtDomainUk: []
+        - basicAuthAtDomainFr: []
       description: Returns 'Hello' to the caller
       # used as the method name of the controller
       operationId: hello
