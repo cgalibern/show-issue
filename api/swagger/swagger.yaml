@@ -21,6 +21,9 @@ securityDefinitions:
   basicAuthAtDomainUk:
     type: basic
     description: basic auth checks on Uk passwords.
+  basicAuthAtDomainFr:
+    type: basic
+    description: basic auth checks on Fr passwords.
 paths:
   /hello:
     # binds a127 app logic to a route
@@ -28,6 +31,7 @@ paths:
     get:
       security:
         - basicAuthAtDomainUk: []
+        - basicAuthAtDomainFr: []
       description: Returns 'Hello' to the caller
       # used as the method name of the controller
       operationId: hello
@@ -54,6 +58,7 @@ paths:
     get:
       security:
         - basicAuthAtDomainUk: []
+        - basicAuthAtDomainFr: []
       description: Returns persons to the caller
       # used as the method name of the controller
       operationId: list
