@@ -20,21 +20,4 @@ module.exports = {
             return cb({message:"can not validate on Uk passwords: no basic auth header"});
         };
     },
-
-    basicAuthAtDomainFr:function (req, authOrSecDef, scopesOrApiKey, cb) {
-        var user = auth (req);
-        if (user) {
-            if ( user.name === "sarrah" && user.pass === "sarrah-fr-password") {
-                sails.log.verbose("user %s allowed on Uk", user.name);
-                req.userAuthentifiedOn = "FR";
-                return cb();
-            } else {
-                sails.log.verbose("cannot validate user %s on FR", user.name);
-                return cb({message:"user password not valid in FR"});
-            }
-        } else {
-            sails.log.verbose("no basic auth header found");
-            return cb({message:"can not validate on Fr passwords: no basic auth header"});
-        };
-    },
 };
