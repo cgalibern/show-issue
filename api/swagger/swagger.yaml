@@ -52,14 +52,14 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /node:
+  /person:
     # binds a127 app logic to a route
-    x-swagger-router-controller: NodeController
+    x-swagger-router-controller: PersonController
     get:
       security:
         - basicAuthAtDomainUk: []
         - basicAuthAtDomainFr: []
-      description: Returns 'Hello' to the caller
+      description: Returns persons to the caller
       # used as the method name of the controller
       operationId: list
       responses:
@@ -84,8 +84,4 @@ definitions:
       message:
         type: string
   ErrorResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
+    type: string
