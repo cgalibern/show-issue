@@ -56,6 +56,9 @@ paths:
       operationId: createSession
       produces:
         - application/json
+      consumes:
+        - application/json
+        - application/x-www-form-urlencoded
       parameters:
         - name: credentials
           in: body
@@ -75,6 +78,23 @@ paths:
             $ref: "#/definitions/ErrorResponse"
     delete:
       description: terminate a session
+      # used as the method name of the controller
+      operationId: terminateSession
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/terminateSession:
+    x-swagger-router-controller: AuthController
+    get:
+      description: terminate a session using get
       # used as the method name of the controller
       operationId: terminateSession
       responses:

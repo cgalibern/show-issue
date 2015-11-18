@@ -15,25 +15,10 @@ module.exports = {
 function createSession(req, res, next) {
     sails.log.debug("createSession...");
     passport.authenticate('postcred',
-        function(err, user, info) {
-            if (err) {
-                sails.log.error("authenticate err found: %s", err);
-                return res.json(500,{message:'internal error'});
-            }
-            if (!user) {
-                debug("postcred authenticate failed: %s", info.message);
-                return res.json(403,{message:info.message});
-            }
-            req.logIn(user, function(err) {
-                if (err) {
-                    sails.log.error("req.logIn error: %s", err);
-                    return res.json(500,{message:'internal error'});
-                }
-                debug("session created by req.logIn");
-            });
-            debug("authenticate user found: %s", user.username);
-            res.json({message:"session created"});
-        })(req, res, next);
+                            { successRedirect: '/',
+                              failureRedirect: '/login',
+                              successFlash: 'Welcome!',
+                              failureFlash: true })(req, res, next);
 };
 
 function terminateSession(req, res, next) {
@@ -41,9 +26,9 @@ function terminateSession(req, res, next) {
     if (req.user) {
         req.logout();
         debug("removed session")
-        return res.redirect('/login');
+        return res.redirect('/');
     } else {
         debug("no session to remove");
-        return res.redirect('/login');
+        return res.redirect('/');
     }
 };
