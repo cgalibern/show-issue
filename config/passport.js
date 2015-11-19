@@ -16,54 +16,31 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-passport.use('basicAuth', new BasicStrategy(
-  function(username, password, done) {
-    debug("exec basicAuth Strategy: username=%s", username);
-    User.findOne({ username: username }, function (err, user) {
-      if (err) {
-          sails.log.error('findOne error: %s',err);
-          return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (password === user.password) {
-        var returnUser = {
-          username: user.username,
-          createdAt: user.createdAt,
-          id: user.id
-        };
-        return done(null, returnUser, { message: 'Logged In Successfully' });
-      } else {
-        return done(null, false, { message: 'Invalid Password' });
-      }
-    });
-  }
-));
+function authenticate(username, password, done) {
+  debug("exec basicAuth Strategy: username=%s", username);
+  User.findOne({ username: username }, function (err, user) {
+    if (err) {
+        sails.log.error('findOne error: %s',err);
+        return done(err); }
+    if (!user) {
+      return done(null, false, { message: 'Incorrect username.' });
+    }
+    if (password === user.password) {
+      var returnUser = {
+        username: user.username,
+        createdAt: user.createdAt,
+        id: user.id
+      };
+      return done(null, returnUser, { message: 'Logged In Successfully' });
+    } else {
+      return done(null, false, { message: 'Invalid Password' });
+    }
+  });
+};
 
-passport.use('postcred', new LocalStrategy(
-  function(username, password, done) {
-    debug("exec postcred Strategy: username=%s", username);
-    User.findOne({ username: username }, function (err, user) {
-      if (err) {
-          sails.log.error('findOne error: %s',err);
-          return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (password === user.password) {
-        var returnUser = {
-          username: user.username,
-          createdAt: user.createdAt,
-          id: user.id
-        };
-        return done(null, returnUser, { message: 'Logged In Successfully' });
-      } else {
-        return done(null, false, { message: 'Invalid Password' });
-      }
-    });
+passport.use('basicAuth', new BasicStrategy(authenticate));
 
-  }
-));
-
+passport.use('postcred', new LocalStrategy(authenticate));
 
 module.exports.passport = passport;
+
