@@ -5,7 +5,10 @@ module.exports = {
 
 function list(req, res) {
     sails.log("running list of Vips...");
-    Person.find({}, function (err, results){
+    var crit = {};
+    if (req.swagger.params.name.value)
+        crit = {name: req.swagger.params.name.value}
+    Person.find(crit, function (err, results){
         res.json(results);
     });
 };

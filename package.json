@@ -1,4 +1,4 @@
-{
+  {
   "name": "swagger-latest",
   "version": "0.0.1",
   "private": true,
@@ -35,11 +35,12 @@
   },
   "devDependencies": {
     "should": "^5.2.0",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "verror": "^1.6.0"
   },
   "scripts": {
     "start": "node app.js",
     "debug": "node debug app.js",
-    "test": "swagger project test"
+    "test": "NODE_ENV=test swagger project test"
   }
 }
