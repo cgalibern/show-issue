@@ -5,19 +5,22 @@ describe('controllers', function() {
 
   describe('hello_world', function() {
 
-    describe('GET /hello', function() {
+    describe('GET /person', function() {
 
-      it('should return a default string', function(done) {
-
+      it('should return correct number of Persons', function(done) {
         request(server)
-          .get('/hello')
+          .get('/person')
           .set('Accept', 'application/json')
+          .auth('paul', 'atreide')
           .expect('Content-Type', /json/)
           .expect(200)
           .end(function(err, res) {
             should.not.exist(err);
-
-            res.body.should.eql('Hello, stranger!');
+            Person.count({}, function (e, nb) {
+              if (e)
+                throw e;
+                res.body.length.should.eql(nb);
+            });
 
             done();
           });
@@ -26,15 +29,18 @@ describe('controllers', function() {
       it('should accept a name parameter', function(done) {
 
         request(server)
-          .get('/hello')
-          .query({ name: 'Scott'})
+          .get('/person')
+          .query({ name: 'toto'})
           .set('Accept', 'application/json')
+          .auth('paul', 'atreide')
           .expect('Content-Type', /json/)
           .expect(200)
           .end(function(err, res) {
             should.not.exist(err);
 
-            res.body.should.eql('Hello, Scott!');
+            res.body.should.be.type('object');
+            res.body.length.should.be.above(0);
+            res.body[0].should.have.property('name','toto')
 
             done();
           });

@@ -8,6 +8,11 @@ before(function(done) {
     sails = s;
     global.server = sails.hooks.http.app;
     // here you can load fixtures, etc.
+    User.findOrCreate({username:'paul'}, {username:'paul', password:'atreide'}, function(e,created){
+      if (e)
+        throw e;
+      console.log('fixture user %s created', created.username);
+    });
     done(err, sails);
   });
 });

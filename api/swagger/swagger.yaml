@@ -18,27 +18,30 @@ consumes:
 produces:
   - application/json
 securityDefinitions:
-  basicAuthAtDomainUk:
+  basicAuth:
     type: basic
-    description: basic auth checks on Uk passwords.
-  basicAuthAtDomainFr:
+    description: basic auth checks on User database.
+  # TODO change type to cookie or other
+  session:
     type: basic
-    description: basic auth checks on Fr passwords.
+    description: session auth.
 paths:
-  /hello:
+  /person:
     # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+    x-swagger-router-controller: PersonController
     get:
       security:
-        - basicAuthAtDomainUk: []
-        - basicAuthAtDomainFr: []
-      description: Returns 'Hello' to the caller
+        - basicAuth: []
+        - session: []
+      description: Returns list of Vips
       # used as the method name of the controller
-      operationId: hello
+      operationId: list
+      produces:
+        - application/json
       parameters:
         - name: name
           in: query
-          description: The name of the person to whom to say hello
+          description: The name of the person to show
           required: false
           type: string
       responses:
@@ -46,28 +49,66 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/SuccessResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /person:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: PersonController
-    get:
-      security:
-        - basicAuthAtDomainUk: []
-        - basicAuthAtDomainFr: []
-      description: Returns persons to the caller
-      # used as the method name of the controller
-      operationId: list
+  /auth/session:
+    x-swagger-router-controller: AuthController
+    post:
+      description: establish a session
+      operationId: createSession
+      produces:
+        - application/json
+      consumes:
+        - application/json
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: credentials
+          in: body
+          description: user credentials
+          schema:
+            type: object
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: terminate a session
+      # used as the method name of the controller
+      operationId: terminateSession
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /auth/terminateSession:
+    x-swagger-router-controller: AuthController
+    get:
+      description: terminate a session using get
+      # used as the method name of the controller
+      operationId: terminateSession
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/SuccessResponse"
         # responses may fall through to errors
         default:
           description: Error
@@ -77,11 +118,7 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  HelloWorldResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
   ErrorResponse:
+    type: string
+  SuccessResponse:
     type: string
